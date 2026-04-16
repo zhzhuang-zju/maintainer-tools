@@ -1,0 +1,43 @@
+name: Release Reminder
+
+on:
+  schedule:
+    # Beijing time 9:30 AM (UTC 1:30) on the 15th of each month
+    - cron: '30 1 15 * *'
+    # Beijing time 9:30 AM (UTC 1:30) on the last day of each month (candidates: 28-31)
+    - cron: '30 1 28-31 * *'
+  workflow_dispatch: {}
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if today is the last day of the month
+        if: github.event.schedule == '30 1 28-31 * *'
+        run: |
+          if [ "$(date -u -d tomorrow +%d)" != "01" ]; then
+            echo "Not the last day of the month, skipping."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Send release reminder email
+        if: env.SKIP != 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.163.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[Karmada] Release Reminder"
+          to: ${{ secrets.Release_Team_Mails }}
+          from: Karmada Release Bot
+          body: |
+            Hi Release Team,
+
+            This is a friendly reminder to check the release schedule and proceed with any pending release tasks.
+
+            - Release process: https://github.com/karmada-io/karmada/blob/master/docs/RELEASE.md
+            - Milestones: https://github.com/karmada-io/karmada/milestones
+
+            This is an automated message from the Karmada Release Reminder workflow.
