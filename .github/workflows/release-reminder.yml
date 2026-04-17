@@ -2,9 +2,9 @@ name: Release Reminder
 
 on:
   schedule:
-    # Beijing time 9:13 AM (UTC 1:30) on the 15th of each month
+    # Beijing time 9:13 AM (UTC 1:13) on the 15th of each month
     - cron: '13 1 15 * *'
-    # Beijing time 9:13 AM (UTC 1:30) on the last day of each month (candidates: 28-31)
+    # Beijing time 9:13 AM (UTC 1:13) on the last day of each month (candidates: 28-31)
     - cron: '13 1 28-31 * *'
   workflow_dispatch: {}
 
