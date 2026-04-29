@@ -2,10 +2,10 @@ name: Release Reminder
 
 on:
   schedule:
-    # Beijing time 9:13 AM (UTC 1:13) on the 15th of each month
-    - cron: '13 1 15 * *'
-    # Beijing time 9:13 AM (UTC 1:13) on the last day of each month (candidates: 28-31)
-    - cron: '13 1 28-31 * *'
+    # Beijing time 8:13 AM (UTC 00:13) on the 15th of each month
+    - cron: '13 0 15 * *'
+    # Beijing time 8:13 AM (UTC 00:13) on the last day of each month (candidates: 28-31)
+    - cron: '13 0 28-31 * *'
   workflow_dispatch: {}
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if today is the last day of the month
-        if: github.event.schedule == '30 1 28-31 * *'
+        if: github.event.schedule == '13 0 28-31 * *'
         run: |
           if [ "$(date -u -d tomorrow +%d)" != "01" ]; then
             echo "Not the last day of the month, skipping."
